@@ -67,6 +67,7 @@ def evaluate_model(best_model, X_test, y_test, best_n, method):
     auc = roc_auc_score(y_test_bin, y_prob, multi_class='ovo')
     
     return {
+        'best_n_estimators': best_n,
         'test_accuracy': accuracy_score(y_test, y_pred),
         'test_precision': precision_score(y_test, y_pred, average='macro'),
         'test_recall': recall_score(y_test, y_pred, average='weighted'),
