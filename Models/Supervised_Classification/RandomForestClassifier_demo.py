@@ -16,9 +16,9 @@ def load_data(features_path, labels_path, test_size=test_size, random_state=rand
     return train_test_split(X, y, test_size=test_size, random_state=random_state, stratify=y)
 
 
-def cv_search(n_estimators_limit, cv, X_train, y_train, random_state):
+def cv_search(n_estimators_start, n_estimators_end, cv, X_train, y_train, random_state):
     cv_scores = []
-    est_range = range(10, n_estimators_limit)  # 10 starts relatively reasonably
+    est_range = range(n_estimators_start, n_estimators_end) 
     for n in est_range:
         rf = RandomForestClassifier(n_estimators=n, random_state=random_state)
         scores = cross_val_score(rf, X_train, y_train, cv=cv)
@@ -29,8 +29,8 @@ def cv_search(n_estimators_limit, cv, X_train, y_train, random_state):
     return best_n, best_model
 
 
-def grid_search(n_estimators_limit, cv, X_train, y_train, random_state):
-    param_grid = {'n_estimators': range(10, n_estimators_limit)}
+def grid_search(n_estimators_start, n_estimators_end cv, X_train, y_train, random_state):
+    param_grid = {'n_estimators': range(n_estimators_start, n_estimators_end)}
     grid = GridSearchCV(RandomForestClassifier(random_state=random_state), param_grid, cv=cv)
     grid.fit(X_train, y_train)
     best_n = grid.best_params_['n_estimators']
@@ -38,8 +38,8 @@ def grid_search(n_estimators_limit, cv, X_train, y_train, random_state):
     return best_n, best_model
 
 
-def bayes_search(n_estimators_limit, n_iter, cv, X_train, y_train, random_state):
-    param_space = {'n_estimators': (10, n_estimators_limit)}   # staring from 10 is reasonable
+def bayes_search(n_estimators_start, n_estimators_end, n_iter, cv, X_train, y_train, random_state):
+    param_space = {'n_estimators': (n_estimators_start, n_estimators_end)}   
     bs = BayesSearchCV(RandomForestClassifier(random_state=random_state), param_space, n_iter=n_iter, cv=cv, random_state=random_state)
     bs.fit(X_train, y_train)
     best_n = bs.best_params_['n_estimators']
@@ -47,11 +47,11 @@ def bayes_search(n_estimators_limit, n_iter, cv, X_train, y_train, random_state)
     return best_n, best_model
 
 
-def auto_search(n_estimators_limit, n_iter, cv, X_train, y_train, random_state):
+def auto_search(n_estimators_start, n_estimators_end, n_iter, cv, X_train, y_train, random_state):
     if len(X_train) < 5000:
         return grid_search(n_estimators_limit, cv, X_train, y_train)
     else:
-        param_dist = {'n_estimators': np.arange(10, n_estimators_limit*3, 10)}
+        param_dist = {'n_estimators': np.arange(n_estimators_start, n_estimators_end*3, 10)}
         search = RandomizedSearchCV(RandomForestClassifier(random_state=random_state), param_distributions=param_dist, n_iter=n_iter, cv=cv, random_state=random_state)
         search.fit(X_train, y_train)
         best_n = search.best_params_['n_estimators']
@@ -80,13 +80,13 @@ def evaluate_model(best_model, X_test, y_test, best_n, method):
 def Model_RF(features_path, labels_path, n_estimators_limit=n_estimators_limit, cv=cv, n_iter=n_iter, method=method, test_size=test_size, random_state=random_state):
     X_train, X_test, y_train, y_test = load_data(features_path, labels_path, test_size, random_state)
     if method == 'cv':
-        best_n, best_model = cv_search(n_estimators_limit, cv, X_train, y_train, random_state)
+        best_n, best_model = cv_search(n_estimators_start, n_estimators_end, cv, X_train, y_train, random_state)
     elif method == 'grid':
-        best_n, best_model = grid_search(n_estimators_limit, cv, X_train, y_train, random_state)
+        best_n, best_model = grid_search(n_estimators_start, n_estimators_end, cv, X_train, y_train, random_state)
     elif method == 'bs':
-        best_n, best_model = bayes_search(n_estimators_limit, n_iter, cv, X_train, y_train, random_state)
+        best_n, best_model = bayes_search(n_estimators_start, n_estimators_end, n_iter, cv, X_train, y_train, random_state)
     else:
-        best_n, best_model = auto_search(n_estimators_limit, n_iter, cv, X_train, y_train, random_state)
+        best_n, best_model = auto_search(n_estimators_start, n_estimators_end, n_iter, cv, X_train, y_train, random_state)
     return evaluate_model(best_model, X_test, y_test, best_n, method)
 
 
@@ -95,7 +95,8 @@ if __name__ == "__main__":
     results = Model_RF(
         features_path='features.csv',
         labels_path='labels.csv',
-        n_estimators_limit=100,  # I set it starts at 10, which is relatively reasonable
+        n_estimators_start=10, 
+        n_estimators_end=100,
         cv=5,
         n_iter=10,
         method='bs',  # 'cv', 'grid', 'bs', or 'auto'
