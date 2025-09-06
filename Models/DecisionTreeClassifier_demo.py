@@ -68,12 +68,23 @@ def auto_search(max_depth_limit, n_iter, cv, X_train, y_train, random_state=rand
 # 3. evaluate the model
 def evaluate_model(best_model, X_test, y_test, best_depth, method):
     y_pred = best_model.predict(X_test)
+    
+    # prepare for roc_auc (Area Under the ROC Curve)
+    # Calculate the multi-class probability output
+    y_prob = best_model.predict_proba(X_test)
+    y_test_bin = label_binarize(y_test, classes=np.unique(y_test))
+    # Calculate multi-class AUC, ovo strategy
+    auc = roc_auc_score(y_test_bin, y_prob, multi_class='ovo')
+    # OvR compares each category with the remaining categories and calculates the AUC of each category. 
+    # OvO, on the other hand, compares each pair of categories and calculates the AUC between any two pairs.
+    
     return {
         'best_max_depth': best_depth,
         'test_accuracy': accuracy_score(y_test, y_pred),
         'test_precision': precision_score(y_test, y_pred, average='macro'),
         'test_recall': recall_score(y_test, y_pred, average='weighted'),
         'test_f1': f1_score(y_test, y_pred, average='macro'),
+        'test_auc': auc,
         'method': method
     }
 
