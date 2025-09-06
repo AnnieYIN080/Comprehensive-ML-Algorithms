@@ -1,6 +1,6 @@
 # Machine Learning <English version>
 
-# explains 
+# Steps
 1. Data Preparation: Ensure that the paths of feature and tag files are correct and the data format meets the requirements.<br>
 2. Data Preprocessing: Select an appropriate preprocessing method based on the characteristics of the data.<br>
 3. The model choice: choose the appropriate supervision and learning model according to task demand, here can be used [H2O]([url](https://docs.h2o.ai/h2o/latest-stable/h2o-docs/automl.html)) instead.<br>
