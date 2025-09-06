@@ -7,9 +7,16 @@ dist, ind = tree.query(X[:5], k=3)  # Query the three nearest neighbors of the f
 print("KDTree distances:\n", dist)
 print("KDTree indices:\n", ind)
 '''
+import numpy as np
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV
+from skopt import BayesSearchCV          # pip install scikit-optimize
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 # 1. load data
-def load_data(features_path, labels_path, test_size=0.2, random_state=42):
+def load_data(features_path, labels_path, test_size=test_size, random_state=random_state):
     # load data 
     X = pd.read_csv('features_path').values  # Convert to numpy array
     y = pd.read_csv('labels_path').values.flatten()  # flatten() converts a two-dimensional array to a one-dimensional array
@@ -76,7 +83,7 @@ def grid_search(k, cv, X_train, y_train):
      return best_k, best_model
 
 
-def bayes_search(k, n_iter, cv, X_train, y_train, random_state=42):
+def bayes_search(k, n_iter, cv, X_train, y_train, random_state=random_state):
     from skopt import BayesSearchCV
     param_space = {'n_neighbors': (1, k)}
     bs = BayesSearchCV(KNeighborsClassifier(), param_space, n_iter=n_iter, cv=cv, random_state=random_state)    
@@ -90,7 +97,7 @@ def bayes_search(k, n_iter, cv, X_train, y_train, random_state=42):
   
 
 
-def auto_search(k, n_iter, cv, X_train, y_train, random_state=42):
+def auto_search(k, n_iter, cv, X_train, y_train, random_state=random_state):
     if len(X_train) < 5000:
         return grid_search(k, cv, X_train, y_train)
       
@@ -119,6 +126,7 @@ def auto_search(k, n_iter, cv, X_train, y_train, random_state=42):
     return best_k, best_model
 
 
+
 # 3. evaluate the model
 def evaluate_model(best_model, X_test, y_test, best_k, method):
     y_pred = best_model.predict(X_test)
@@ -132,6 +140,7 @@ def evaluate_model(best_model, X_test, y_test, best_k, method):
     }
   
 
+    
 
 # 4. use knn model
 def Model_KNN(features_path, labels_path, k=k, cv=cv, n_iter=n_iter, method=method, test_size=test_size, random_state=random_state):
