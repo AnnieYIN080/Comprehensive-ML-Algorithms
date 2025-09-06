@@ -20,6 +20,7 @@ Supervised learning is applicable to scenarios with clear output requirements. A
 2. Data Preprocessing: Select an appropriate preprocessing method based on the characteristics of the data.<br>
 3. The model choice: choose the appropriate supervision and learning model according to task demand, here can be used [H2O]([url](https://docs.h2o.ai/h2o/latest-stable/h2o-docs/automl.html)) instead.<br>
 4. Parameter tune: Optimize model parameters using methods such as cross-validation and grid search.<br>
+Algorithm parameter tuning refers to the process in machine learning or data analysis where the parameters of an algorithm are adjusted to minimize the loss function (such as loss in SSDS) in order to optimize the performance of the algorithm. This typically involves running the algorithm on the training dataset, evaluating its performance (such as accuracy, recall rate, etc.), then adjusting the parameters based on the evaluation results, and repeating this process until the best parameter combination is found to achieve the best results for the algorithm on a specific task.<br>
 5. Model Evaluation: Evaluate the model performance using metrics such as accuracy rate, precision rate, recall rate, and F1 score.<br>
 6. Result Interpretation: Interpret the model results based on business requirements and provide actionable suggestions.<br>
 7. Continuous Improvement: Continuously optimize the model and data processing procedures based on model performance and new data.<br>
@@ -49,6 +50,8 @@ Supervised learning is applicable to scenarios with clear output requirements. A
 2.数据预处理：根据数据特点，选择合适的预处理方法。<br>
 3.模型选择：根据任务需求选择合适的监督学习模型，此处可以用[H2O]([url](https://docs.h2o.ai/h2o/latest-stable/h2o-docs/automl.html))代替。<br>
 4.参数调优(parameters tune)：使用交叉验证和网格搜索等方法优化模型参数。<br>
-5.模型评估：使用准确率、精确率、召回率、F1分数等指标评估模型性能。<br>
+算法调参，指的是在机器学习或数据分析中，通过调整算法的参数，使损失函数（例如SSD中的loss）尽量小，来优化算法的性能。这通常涉及在训练数据集上运行算法，评估其表现（例如准确率、召回率等），然后根据评估结果调整参数，并重复这个过程，直到找到最佳参数组合，使算法在特定任务上达到最佳效果<br>
+
+5.模型评估：使用准确率、精确率、召回率、F1分数、AUC等指标评估模型性能。<br>
 6.结果解释：根据业务需求解释模型结果，提供可操作的建议。<br>
 7.持续改进：根据模型表现和新数据，持续优化模型和数据处理流程。<br>
