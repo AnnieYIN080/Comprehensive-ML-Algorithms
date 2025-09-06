@@ -15,7 +15,7 @@
 Supervised learning is applicable to scenarios with clear output requirements. All supervised learning models (classification, regression) can use the provided three methods to find the optimal parameters.<br>
 **Suggestion:** When the dataset is too large, grid Search is too slow. You can try Random Search or Bayesian Optimization, especially Deep Learning
 
-# ================= explains =================
+# explains 
 1. Data Preparation: Ensure that the paths of feature and tag files are correct and the data format meets the requirements.<br>
 2. Data Preprocessing: Select an appropriate preprocessing method based on the characteristics of the data.<br>
 3. The model choice: choose the appropriate supervision and learning model according to task demand, here can be used [H2O]([url](https://docs.h2o.ai/h2o/latest-stable/h2o-docs/automl.html)) instead.<br>
