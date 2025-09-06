@@ -128,19 +128,23 @@ def auto_search(k, n_iter, cv, X_train, y_train, random_state=random_state):
 
 
 # 3. evaluate the model
-def evaluate_model(best_model, X_test, y_test, best_k, method):
+def evaluate_model(best_model, X_test, y_test, method):
     y_pred = best_model.predict(X_test)
+
+    y_prob = best_model.predict_proba(X_test)
+    y_test_bin = label_binarize(y_test, classes=np.unique(y_test))
+    auc = roc_auc_score(y_test_bin, y_prob, multi_class='ovo')
+    
     return {
-        'best_k': best_k,
         'test_accuracy': accuracy_score(y_test, y_pred),
-        'test_precision': precision_score(y_test, y_pred, average='macro'), # 'macro' calculates the indicators of each category and then takes the average
-        'test_recall': recall_score(y_test, y_pred, average='weighted'),    # 'weighted' calculates the indicators for each category and then averages them weighted based on the support rate of each category
+        'test_precision': precision_score(y_test, y_pred, average='macro'),
+        'test_recall': recall_score(y_test, y_pred, average='weighted'),
         'test_f1': f1_score(y_test, y_pred, average='macro'),
+        'test_auc': auc,
         'method': method
     }
   
 
-    
 
 # 4. use knn model
 def Model_KNN(features_path, labels_path, k=k, cv=cv, n_iter=n_iter, method=method, test_size=test_size, random_state=random_state):
