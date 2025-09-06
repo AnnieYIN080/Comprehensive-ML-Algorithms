@@ -128,7 +128,7 @@ def auto_search(k, n_iter, cv, X_train, y_train, random_state=random_state):
 
 
 # 3. evaluate the model
-def evaluate_model(best_model, X_test, y_test, method):
+def evaluate_model(best_model, X_test, y_test, best_k,method):
     y_pred = best_model.predict(X_test)
 
     y_prob = best_model.predict_proba(X_test)
@@ -136,6 +136,7 @@ def evaluate_model(best_model, X_test, y_test, method):
     auc = roc_auc_score(y_test_bin, y_prob, multi_class='ovo')
     
     return {
+        'best_k': best_k,
         'test_accuracy': accuracy_score(y_test, y_pred),
         'test_precision': precision_score(y_test, y_pred, average='macro'),
         'test_recall': recall_score(y_test, y_pred, average='weighted'),
