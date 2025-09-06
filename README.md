@@ -14,19 +14,19 @@ Algorithm parameter tuning refers to the process in machine learning or data ana
 
 
 ## A. Supervised Learning Model
-### 1. Classification model (output for discrete label prediction) :
+### 1. Classification model (output for discrete label prediction)
     K-nearest neighbor (K-NN) ‌, Naive Bayes(Naive Bayes)‌,  Logistic Regression(Logistic Regression), 
     Decision Tree, Random Forest, support vector machine(SVM)‌‌, Neural Networks
-### 2. Regression model (output for continuous value prediction):
+### 2. Regression model (output for continuous value prediction)
     Decision Tree Regression ‌, Random Forest Regression ‌, Support Vector Regression(SVR)‌, 
     Linear Regression, Polynomial Regression, Ridge Regression, Lasso Regression, Elastic Net Regression‌, 
     # Gradient Boosting Regression, XGBoost Regression‌, LightGBM Regression‌, CatBoost Regression ‌
 ## B. Unsupervised Learning Models
-### 1. Clustering model ‌ (data grouping) :
+### 1. Clustering model ‌ (data grouping) 
     K-Means ‌, Hierarchical Clustering ‌, DBSCAN (density-based clustering) ‌
-### 2. Dimensionality reduction model ‌ (feature extraction) :
+### 2. Dimensionality reduction model ‌ (feature extraction) 
     Principal component analysis (PCA) ‌, t-SNE (visualization of high-dimensional data) ‌, Autoencoder ‌
-### ‌ 3. Association rule learning ‌ :
+### ‌ 3. Association rule learning ‌ 
     Apriori algorithm (market basket analysis)‌
 
 ## C. Ensemble learning Models
