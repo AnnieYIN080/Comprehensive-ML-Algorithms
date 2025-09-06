@@ -49,12 +49,19 @@ def auto_search(X_train, y_train, cv, n_iter, param_grid, param_dist, random_sta
 
 def evaluate_model(best_model, X_test, y_test, best_C, method):
     y_pred = best_model.predict(X_test)
+    
+    y_prob = best_model.predict_proba(X_test)
+    y_test_bin = label_binarize(y_test, classes=np.unique(y_test))
+   
+    auc = roc_auc_score(y_test_bin, y_prob, multi_class='ovo')
+    
     return {
         'best_C': best_C,
         'test_accuracy': accuracy_score(y_test, y_pred),
         'test_precision': precision_score(y_test, y_pred, average='macro'),
         'test_recall': recall_score(y_test, y_pred, average='weighted'),
         'test_f1': f1_score(y_test, y_pred, average='macro'),
+        'test_auc': auc,
         'method': method
     }
 
