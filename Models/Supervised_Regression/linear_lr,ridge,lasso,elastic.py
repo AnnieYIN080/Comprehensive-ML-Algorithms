@@ -73,12 +73,67 @@ if __name__ == "__main__":
     test_size = 0.2
     random_state = 42
 
+    # This code configures a preprocessing flow that only uses the data standardizer, without using PCA or feature selection.
     use_scaler = True
+    # It indicates that a data standardizer will be used, which is typically employed to scale data to a specific range [0,1]
+    
     use_pca = False
+    # use_pca = False indicates that principal component analysis (PCA) is not used, which is a dimensionality reduction technique
     pca_n_comp = None
+    # pca_n_comp = None indicates that if PCA is used, the number of principal components will not be specified, which is consistent with use_pca = False
+    # If your goal is to reduce the dimension while retaining information, evaluating the performance stability and cross-validation scores. 
+    # Prioritize setting the cumulative interpretation variance threshold corresponding to pca_n_comp (such as 0.90, 0.95).
+    
     use_select = False
+    # "use_select = False" indicates that feature selection is not used. Feature selection is the process of choosing the most relevant features in the dataset.
     k_best = None
+    # k_best = None. If no feature selection is performed, there is no need to specify the number of best features to be retained, which is consistent with use_select = False.
+    '''
+    1. filtering (Directly evaluate the relationship between each feature and the target variable): Variance screening (Deleting low-variance features), Chi-square test (classification problem)
+    from sklearn.pipeline import Pipeline
+    # 1.1
+    pipeline = Pipeline([
+        ('scaler', StandardScaler()),
+        ('var_thresh', VarianceThreshold(threshold=0.01)),
+        ('clf', LogisticRegression(max_iter=1000))
+    ])
+    # 1.2
+    pipeline = Pipeline([
+        ('scaler', StandardScaler(with_mean=False)),  # When used with chi2, non-negative data is usually required
+        ('selector', SelectKBest(chi2, k=50)),
+        ('clf', LogisticRegression(max_iter=1000))
+    ])
+    # 2. wrappering (Use a predictive model to evaluate the effectiveness of a set of features and gradually search for the best subset)
+    from sklearn.feature_selection import RFE
+    from sklearn.linear_model import LogisticRegression
+    
+    estimator = LogisticRegression(max_iter=1000)
+    selector = RFE(estimator, n_features_to_select=20, step=1)
 
+    from sklearn.pipeline import Pipeline
+    pipeline = Pipeline([
+        ('clf', selector),
+        ('final', LogisticRegression(max_iter=1000)) 
+    ])
+    
+    # 3. Embedded (Feature selection is carried out simultaneously during the model training process, usually through regularization or importance weighting)
+    # 3.1
+    from sklearn.ensemble import RandomForestClassifier
+    clf = RandomForestClassifier(n_estimators=200, random_state=42, n_jobs=-1)
+    clf.fit(X_train, y_train)
+    importances = clf.feature_importances_
+    indices = np.argsort(importances)[::-1]
+    selected_features = [i for i in indices[:k]]   # Selecting fisrt k Important Features
+    
+    # 3.2
+    from sklearn.feature_selection import SelectFromModel
+    from sklearn.linear_model import Lasso
+    model = Lasso(alpha=0.01)
+    sfm = SelectFromModel(model, threshold='mean', prefit=False)
+    sfm.fit(X_train, y_train)
+    X_train_selected = sfm.transform(X_train)
+    '''
+    
     method = 'ridge'      # 'lr', 'ridge', 'lasso', 'elastic'
     search = 'grid'       # 'grid', 'random'
     cv = 5
