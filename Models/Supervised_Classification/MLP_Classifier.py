@@ -1,12 +1,12 @@
 #!usr/bin/env python3
 # using Multilayer Perceptron of Neural Network 
-
+# pip install scikit-learn scikit-optimize
 import numpy as np
 import pandas as pd
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV
-from skopt import BayesSearchCV          # pip install scikit-optimize
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from skopt import BayesSearchCV          
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, classification_report
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.preprocessing import label_binarize
 
@@ -17,6 +17,7 @@ def load_data(features_path, labels_path, test_size, random_state):
     y = LabelEncoder().fit_transform(y)
     return train_test_split(X, y, test_size=test_size, random_state=random_state, stratify=y)
 
+# The key point of parameter adjustment is the size of the hidden layer
 def cv_search(X_train, y_train, cv, param_grid, max_iter, random_state):
     cv_scores = []
     # Search for the size of hidden layers
@@ -30,11 +31,43 @@ def cv_search(X_train, y_train, cv, param_grid, max_iter, random_state):
 
 def grid_search(X_train, y_train, cv, param_grid, max_iter, random_state):
     grid = GridSearchCV(MLPClassifier(max_iter=max_iter, random_state=random_state), param_grid, cv=cv)
+    '''
+    # Tuning the parameters such as the learning rate (learning_rate_init) and activation function of the neural network (MLPClassifier)
+    param_grid = {
+        'hidden_layer_sizes': [(50,), (100,)],
+        'learning_rate_init': [0.001, 0.01, 0.1],
+        'activation': ['relu', 'tanh', 'logistic']    # activation: Supports 'relu', 'tanh', 'logistic' (i.e. sigmoid), etc
+    }
+    
+    grid = GridSearchCV(
+        MLPClassifier(max_iter=500, random_state=42),
+        param_grid=param_grid,
+        cv=5,
+        scoring='accuracy'
+    )
+    '''
     grid.fit(X_train, y_train)
     return grid.best_params_['hidden_layer_sizes'], grid.best_estimator_
+    
 
 def bayes_search(X_train, y_train, cv, n_iter, param_space, max_iter, random_state):
     bs = BayesSearchCV(MLPClassifier(max_iter=max_iter, random_state=random_state), param_space, n_iter=n_iter, cv=cv, random_state=random_state)
+    '''
+    param_space = {
+        'hidden_layer_sizes': [(50,), (100,), (50, 50)],
+        'learning_rate_init': (1e-4, 1e-1, 'log-uniform'),      # 'log-uniform' 用来采样学习率这个连参数
+        'activation': ['relu', 'tanh', 'logistic']
+    }
+
+    bayes = BayesSearchCV(
+        MLPClassifier(max_iter=500, random_state=42),
+        search_spaces=param_space,
+        n_iter=20,
+        cv=5,
+        random_state=42,
+        scoring='accuracy'
+    )
+    '''
     bs.fit(X_train, y_train)
     return bs.best_params_['hidden_layer_sizes'], bs.best_estimator_
 
