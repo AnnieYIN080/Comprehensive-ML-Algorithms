@@ -23,11 +23,13 @@ Algorithm parameter tuning refers to the process in machine learning or data ana
     # Gradient Boosting Regression, XGBoost Regression‌, LightGBM Regression‌, CatBoost Regression ‌
 ## B. Unsupervised Learning Models
 ### 1. Clustering model ‌ (data grouping) 
-    K-Means ‌, Hierarchical Clustering ‌, DBSCAN (density-based clustering) ‌
+    K-Means ‌, Hierarchical Clustering ‌, DBSCAN / HDBSCAN (density-based clustering), Gaussian Mixture Models
 ### 2. Dimensionality reduction model ‌ (feature extraction) 
-    Principal component analysis (PCA) ‌, t-SNE (visualization of high-dimensional data) ‌, Autoencoder ‌
-### ‌ 3. Association rule learning ‌ 
-    Apriori algorithm (market basket analysis)‌
+    Principal component analysis (PCA) ‌, t-SNE (visualization of high-dimensional data) ‌, UMAP, Autoencoder ‌
+### ‌3. Association rule learning ‌ 
+    Apriori algorithm (market basket analysis),‌ Eclat Algorithm
+### 4. Anomaly Detection    
+    Isolation Forest, One-Class SVM
 
 ## C. Ensemble learning Models
     Bagging (bootstrap aggregation)，Boosting， VotingClassifier，StackingClassifier
